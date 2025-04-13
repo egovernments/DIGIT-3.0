@@ -7,8 +7,12 @@ info:
 paths: {}
 
 components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   parameters:
-    
     RequestIdHeader:
       name: X-Request-ID
       in: header
