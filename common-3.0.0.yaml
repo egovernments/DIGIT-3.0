@@ -2,64 +2,34 @@ openapi: 3.0.3
 info:
   title: Common API Specification
   version: 1.0.0
-  description: Common headers and objects for all microservices.
+  description: Common headers and objects for all DIGIT specifications.
 
 paths: {}
 
 components:
   parameters:
-    AuthorizationHeader:
-      name: Authorization
-      in: header
-      required: true
-      description: "Bearer token for authentication. Required for secured endpoints."
-      schema:
-        type: string
-        minLength: 10
-        maxLength: 2048
-        example: "Bearer eyJhbGciOiJIUzI1..."
-
+    
     RequestIdHeader:
       name: X-Request-ID
       in: header
-      required: true
+      required: false
       description: "Unique identifier for tracking each request. Helps in debugging logs."
       schema:
         type: string
-        minLength: 8
-        maxLength: 50
+        minLength: 2
+        maxLength: 64
         example: "req-12345-abcd"
 
     CorrelationIdHeader:
       name: X-Correlation-ID
       in: header
-      required: true
+      required: false
       description: "Used for distributed tracing across multiple services."
       schema:
         type: string
-        minLength: 8
-        maxLength: 50
+        minLength: 2
+        maxLength: 64
         example: "corr-67890-xyz"
-
-    ContentTypeHeader:
-      name: Content-Type
-      in: header
-      required: true
-      description: "Specifies the request format. Must be application/json."
-      schema:
-        type: string
-        enum: ["application/json"]
-        example: "application/json"
-
-    AcceptHeader:
-      name: Accept
-      in: header
-      required: true
-      description: "Specifies the expected response format. Must be application/json."
-      schema:
-        type: string
-        enum: ["application/json"]
-        example: "application/json"
 
     UserAgentHeader:
       name: User-Agent
@@ -69,7 +39,7 @@ components:
       schema:
         type: string
         minLength: 5
-        maxLength: 255
+        maxLength: 64
         example: "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
 
     TenantIdHeader:
@@ -79,8 +49,8 @@ components:
       description: "Identifies the tenant making the request. Required in multi-tenant systems."
       schema:
         type: string
-        minLength: 3
-        maxLength: 50
+        minLength: 2
+        maxLength: 64
         example: "tenant-xyz"
 
     ForwardedForHeader:
@@ -90,48 +60,74 @@ components:
       description: "Client IP address (used for tracing in load-balanced environments)."
       schema:
         type: string
+        minLength: 2
+        maxLength: 64
         example: "192.168.1.1"
+    
+    ClientId:
+      name: X-Client-Id
+      in: header
+      required: false
+      description: "Unique identifier assigned to the client making the request."
+      schema:
+        type: string
+        minLength: 3
+        maxLength: 100
+        example: "User-Admin-Client"
 
-  responses:
-    CommonResponseHeaders:
-      description: "Standard response headers returned with all API responses."
-      headers:
-        X-Request-ID:
-          description: "Echoes back the X-Request-ID from the request for correlation."
-          schema:
-            type: string
-          example: "req-12345-abcd"
-        X-Correlation-ID:
-          description: "Echoes back the X-Correlation-ID to track requests across microservices."
-          schema:
-            type: string
-          example: "corr-67890-xyz"
-        X-Tenant-ID:
-          description: "Echoes back the tenant identifier if applicable."
-          schema:
-            type: string
-          example: "tenant-xyz"
-        Content-Type:
-          description: "Specifies the format of the response body. Always application/json."
-          schema:
-            type: string
-            enum: ["application/json"]
-          example: "application/json"
-        X-RateLimit-Limit:
-          description: "Indicates the maximum number of allowed requests in a given timeframe."
-          schema:
-            type: integer
-          example: 1000
-        X-RateLimit-Remaining:
-          description: "Indicates the remaining number of requests in the current rate limit window."
-          schema:
-            type: integer
-          example: 999
-        X-RateLimit-Reset:
-          description: "Indicates the time (in UTC epoch seconds) when the rate limit will reset."
-          schema:
-            type: integer
-          example: 1701237890
+    ClientSecret:
+      name: X-Client-Secret
+      in: header
+      required: false
+      description: "Secret key used to authenticate the client making the request."
+      schema:
+        type: string
+        minLength: 8
+        maxLength: 256
+        example: "s3cr3tK3y123"
+
+    TimeStamp:
+      name: X-Time-Stamp
+      in: header
+      required: false
+      description: "Epoch timestamp (in milliseconds) indicating when the request was made."
+      schema:
+        type: integer
+        minimum: 1000000000000
+        maximum: 9999999999999
+        example: 1712830200000
+        
+    RateLimit:
+      name: X-RateLimit
+      in: header
+      required: false
+      description: "Indicates the maximum number of allowed requests in a given timeframe."
+      schema:
+        type: integer
+        minimum: 1
+      example: 1000
+
+    RateLimit-Remaining:
+      name: X-RateLimit-Remaining
+      in: header
+      required: false
+      description: "Indicates the remaining number of requests in the current rate limit window."
+      schema:
+        type: integer
+        minimum: 0
+      example: 999
+
+    RateLimit-Reset:
+      name: X-RateLimit-Reset
+      in: header
+      required: false
+      description: "Indicates the time (in UTC epoch seconds) when the rate limit will reset."
+      schema:
+        type: integer
+        minimum: 0
+      example: 1701237890
+
+  
 
   schemas:
     
