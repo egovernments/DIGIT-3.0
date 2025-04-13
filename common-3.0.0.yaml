@@ -100,36 +100,64 @@ components:
         minimum: 1000000000000
         maximum: 9999999999999
         example: 1712830200000
-        
-    RateLimit:
-      name: X-RateLimit
-      in: header
-      required: false
-      description: "Indicates the maximum number of allowed requests in a given timeframe."
+  
+  headers:
+  
+    X-Response-Time:
+      description: Total time taken to process the request (in milliseconds).
+      schema:
+        type: integer
+        minimum: 0
+      example: 132
+
+    X-Response-Timestamp:
+      description: Server-side timestamp (epoch milliseconds) when the response was generated.
+      schema:
+        type: integer
+        minimum: 1000000000000
+        maximum: 9999999999999
+      example: 1712830212345
+
+    X-Request-ID:
+      description: Echoes the `X-Request-ID` from the request for tracking and correlation.
+      schema:
+        type: string
+      example: "req-12345-abcd"
+
+    X-Correlation-ID:
+      description: Echoes the `X-Correlation-ID` to trace the request across services.
+      schema:
+        type: string
+      example: "corr-67890-xyz"
+
+    X-Tenant-ID:
+      description: Echoes the `X-Tenant-ID` from the request, confirming tenant scope.
+      schema:
+        type: string
+      example: "tenant-xyz"
+
+    X-Rate-Limit:
+      description: Indicates the maximum number of allowed requests in a given timeframe.
       schema:
         type: integer
         minimum: 1
       example: 1000
 
-    RateLimit-Remaining:
-      name: X-RateLimit-Remaining
-      in: header
-      required: false
-      description: "Indicates the remaining number of requests in the current rate limit window."
+    X-Rate-Limit-Remaining:
+      description: Indicates the remaining number of requests in the current rate limit window.
       schema:
         type: integer
         minimum: 0
       example: 999
 
-    RateLimit-Reset:
-      name: X-RateLimit-Reset
-      in: header
-      required: false
-      description: "Indicates the time (in UTC epoch seconds) when the rate limit will reset."
+    X-Rate-Limit-Reset:
+      description: Indicates the time (in UTC epoch seconds) when the rate limit will reset.
       schema:
         type: integer
         minimum: 0
       example: 1701237890
+        
+    
 
   
 
